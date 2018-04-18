@@ -52,12 +52,12 @@ US English should be used.
 
 **Preferred:**
 ```objc
-UIColor *myColor = [UIColor whiteColor];
+UIColor *myColor = UIColor.whiteColor;
 ```
 
 **Not Preferred:**
 ```objc
-UIColor *myColour = [UIColor whiteColor];
+UIColor *myColour = UIColor.whiteColor;
 ```
 
 
@@ -314,16 +314,16 @@ Dot-notation should **always** be used for accessing and mutating properties, as
 
 **Preferred:**
 ```objc
-NSInteger arrayCount = [self.array count];
-view.backgroundColor = [UIColor orangeColor];
-[UIApplication sharedApplication].delegate;
+NSInteger arrayCount = self.array.count;
+view.backgroundColor = UIColor.orangeColor;
+UIApplication.sharedApplication.delegate;
 ```
 
 **Not Preferred:**
 ```objc
-NSInteger arrayCount = self.array.count;
+NSInteger arrayCount = [self.array count];
 [view setBackgroundColor:[UIColor orangeColor]];
-UIApplication.sharedApplication.delegate;
+[[UIApplication sharedApplication] delegate];
 ```
 
 ## Literals
