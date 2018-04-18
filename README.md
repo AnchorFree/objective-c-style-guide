@@ -1,4 +1,4 @@
-# AnchorFree Apple team Objective-C style guide.
+# AnchorFree Objective-C style guide.
 
 This style guide outlines the coding conventions for Apple team project
 
