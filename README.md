@@ -508,9 +508,9 @@ Conditional bodies should always use braces even when a conditional body could b
 if (!error) {
     return success;
 } else if (...) {
-    // return
+    // ...
 } else {
-    //
+    // ...
 }
 ```
 
@@ -613,7 +613,7 @@ When coding with conditionals, the left hand margin of the code should be the "g
 ```objc
 - (void)someMethod {
     if (![someOther boolValue]) {
-	  return;
+        return;
     }
 
     //Do something important
@@ -625,7 +625,7 @@ When coding with conditionals, the left hand margin of the code should be the "g
 ```objc
 - (void)someMethod {
     if ([someOther boolValue]) {
-      //Do something important
+        //Do something important
     }
 }
 ```
