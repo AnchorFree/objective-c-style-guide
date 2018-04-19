@@ -632,7 +632,7 @@ When methods return an error parameter by reference, switch on the returned valu
 
 **Preferred:**
 ```objc
-NSError *error;
+NSError *error = nil;
 if (![self trySomethingWithError:&error]) {
     // Handle Error
 }
@@ -657,7 +657,7 @@ Singleton objects should use a thread-safe pattern for creating their shared ins
 + (instancetype)sharedInstance {
     static id sharedInstance = nil;
 
-    static dispatch_once_t onceToken;
+    static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc] init];
     });
