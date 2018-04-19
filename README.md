@@ -507,10 +507,10 @@ Conditional bodies should always use braces even when a conditional body could b
 ```objc
 if (!error) {
     return success;
-} else if (error.code == 500) {
-    return internalServerError;
+} else if (...) {
+    // return
 } else {
-    return failure;
+    //
 }
 ```
 
