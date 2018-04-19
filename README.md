@@ -171,7 +171,7 @@ UIButton *settingsButton;
 UIButton *setBut;
 ```
 
-A two letter prefix should always be used for class names and constants, however may be omitted for Core Data entity names. For common AnchorFree entities prefix 'AF' should be used.
+A two letter prefix should always be used for class names and constants, however may be omitted for Core Data entity names. For common AnchorFree entities prefix 'AF' should be used. Each project should use own prefix for custom entities (BN, HT etc.)
 
 Constants should be camel-case with all words capitalized and prefixed by the related class name for clarity.
 
