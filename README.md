@@ -110,7 +110,7 @@ Use `#pragma mark -` to categorize methods in functional groupings and protocol/
 * Indent using 4 spaces. Never indent with tabs. Be sure to set this preference in Xcode.
 * Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line.
 
-**Preferred:**
+**For example:**
 ```objc
 if (user.isHappy) {
     //Do something
@@ -171,14 +171,14 @@ UIButton *settingsButton;
 UIButton *setBut;
 ```
 
-A three letter prefix should always be used for class names and constants, however may be omitted for Core Data entity names. For any official raywenderlich.com books, starter kits, or tutorials, the prefix 'RWT' should be used.
+A two letter prefix should always be used for class names and constants, however may be omitted for Core Data entity names. For common AnchorFree entities prefix 'AF' should be used.
 
 Constants should be camel-case with all words capitalized and prefixed by the related class name for clarity.
 
 **Preferred:**
 
 ```objc
-static NSTimeInterval const RWTTutorialViewControllerNavigationFadeAnimationDuration = 0.3;
+static NSTimeInterval const AFTutorialViewControllerNavigationFadeAnimationDuration = 0.3;
 ```
 
 **Not Preferred:**
@@ -246,7 +246,7 @@ Direct access to instance variables that 'back' properties should be avoided exc
 **Preferred:**
 
 ```objc
-@interface RWTTutorial : NSObject
+@interface AFTutorial : NSObject
 
 @property (strong, nonatomic) NSString *tutorialName;
 
@@ -256,7 +256,7 @@ Direct access to instance variables that 'back' properties should be avoided exc
 **Not Preferred:**
 
 ```objc
-@interface RWTTutorial : NSObject {
+@interface AFTutorial : NSObject {
     NSString *tutorialName;
 }
 ```
@@ -344,15 +344,15 @@ Constants are preferred over in-line string literals or numbers, as they allow f
 **Preferred:**
 
 ```objc
-static NSString * const RWTAboutViewControllerCompanyName = @"RayWenderlich.com";
+static NSString * const AFAboutViewControllerCompanyName = @"AnchorFree.com";
 
-static CGFloat const RWTImageThumbnailHeight = 50.0;
+static CGFloat const AFImageThumbnailHeight = 50.0;
 ```
 
 **Not Preferred:**
 
 ```objc
-#define CompanyName @"RayWenderlich.com"
+#define CompanyName @"AnchorFree.com"
 
 #define thumbnailHeight 2
 ```
@@ -364,21 +364,21 @@ When using `enum`s, it is recommended to use the new fixed underlying type speci
 **For Example:**
 
 ```objc
-typedef NS_ENUM(NSInteger, RWTLeftMenuTopItemType) {
-    RWTLeftMenuTopItemMain,
-    RWTLeftMenuTopItemShows,
-    RWTLeftMenuTopItemSchedule
+typedef NS_ENUM(NSInteger, AFLeftMenuTopItemType) {
+    AFLeftMenuTopItemMain,
+    AFLeftMenuTopItemShows,
+    AFLeftMenuTopItemSchedule
 };
 ```
 
 You can also make explicit value assignments (showing older k-style constant definition):
 
 ```objc
-typedef NS_ENUM(NSInteger, RWTGlobalConstants) {
-    RWTPinSizeMin = 1,
-    RWTPinSizeMax = 5,
-    RWTPinCountMin = 100,
-    RWTPinCountMax = 500,
+typedef NS_ENUM(NSInteger, AFGlobalConstants) {
+    AFPinSizeMin = 1,
+    AFPinSizeMax = 5,
+    AFPinCountMin = 100,
+    AFPinCountMax = 500,
 };
 ```
 
@@ -438,16 +438,16 @@ switch (condition) {
 When using an enumerated type for a switch, 'default' is not needed.   For example:
 
 ```objc
-RWTLeftMenuTopItemType menuType = RWTLeftMenuTopItemMain;
+AFLeftMenuTopItemType menuType = AFLeftMenuTopItemMain;
 
 switch (menuType) {
-    case RWTLeftMenuTopItemMain:
+    case AFLeftMenuTopItemMain:
         // ...
         break;
-    case RWTLeftMenuTopItemShows:
+    case AFLeftMenuTopItemShows:
         // ...
         break;
-    case RWTLeftMenuTopItemSchedule:
+    case AFLeftMenuTopItemSchedule:
         // ...
         break;
 }
@@ -456,12 +456,12 @@ switch (menuType) {
 
 ## Private Properties
 
-Private properties should be declared in class extensions (anonymous categories) in the implementation file of a class. Named categories (such as `RWTPrivate` or `private`) should never be used unless extending another class.   The Anonymous category can be shared/exposed for testing using the <headerfile>+Private.h file naming convention.
+Private properties should be declared in class extensions (anonymous categories) in the implementation file of a class. Named categories (such as `AFPrivate` or `private`) should never be used unless extending another class.   The Anonymous category can be shared/exposed for testing using the <headerfile>+Private.h file naming convention.
 
 **For Example:**
 
 ```objc
-@interface RWTDetailViewController ()
+@interface AFDetailViewController ()
 
 @property (strong, nonatomic) GADBannerView *googleAdView;
 @property (strong, nonatomic) ADBannerView *iAdView;
@@ -564,7 +564,7 @@ Where class constructor methods are used, these should always return type of 'in
 
 ```objc
 @interface Airplane
-+ (instancetype)airplaneWithType:(RWTAirplaneType)type;
++ (instancetype)airplaneWithType:(AFAirplaneType)type;
 @end
 ```
 
@@ -681,21 +681,6 @@ A long line of code like this should be carried on to the second line adhering t
 self.productsRequest = [[SKProductsRequest alloc] 
     initWithProductIdentifiers:productIdentifiers];
 ```
-
-
-## Smiley Face
-
-Smiley faces are a very prominent style feature of the raywenderlich.com site!  It is very important to have the correct smile signifying the immense amount of happiness and excitement for the coding topic.  The end square bracket is used because it represents the largest smile able to be captured using ascii art.  A half-hearted smile is represented if an end parenthesis is used, and thus not preferred.
-
-**Preferred:**
-```objc
-:]
-```
-
-**Not Preferred:**
-```objc
-:)
-```  
 
 
 ## Xcode project
