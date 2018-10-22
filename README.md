@@ -277,6 +277,8 @@ Variables should be named as descriptively as possible. Single letter variable n
 
 Asterisks indicating pointers belong with the variable, e.g., `NSString *text` not `NSString* text` or `NSString * text`, except in the case of constants.
 
+Collection variables should be templatized when possible to make explicit the types of the contents of the collection.
+
 [Private properties](#private-properties) should be used in place of instance variables whenever possible. Although using instance variables is a valid way of doing things, by agreeing to prefer properties our code will be more consistent. 
 
 Direct access to instance variables that 'back' properties should be avoided except in initializer methods (`init`, `initWithCoder:`, etc…), `dealloc` methods and within custom setters and getters. For more information on using Accessor Methods in Initializer Methods and dealloc, see [here](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW6).
@@ -286,7 +288,8 @@ Direct access to instance variables that 'back' properties should be avoided exc
 ```objc
 @interface AFTutorial : NSObject
 
-@property (strong, nonatomic) NSString *tutorialName;
+@property (nonatomic) NSString *tutorialName;
+@property (nonatomic) NSDictionary<NSString *, id> *userInfo;
 
 @end
 ```
@@ -297,6 +300,10 @@ Direct access to instance variables that 'back' properties should be avoided exc
 @interface AFTutorial : NSObject {
     NSString *tutorialName;
 }
+
+@property (nonatomic) NSDictionary *userInfo;
+
+@end
 ```
 
 
