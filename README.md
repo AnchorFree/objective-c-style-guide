@@ -277,7 +277,7 @@ Variables should be named as descriptively as possible. Single letter variable n
 
 Asterisks indicating pointers belong with the variable, e.g., `NSString *text` not `NSString* text` or `NSString * text`, except in the case of constants.
 
-Collection variables should be templatized when possible to make explicit the types of the contents of the collection.
+Collection variables should be templatized when possible to make explicit the types of the contents of the collection, i.e. use `NSArray<NSNumber *> *` rather than vanilla `NSArray *`.
 
 [Private properties](#private-properties) should be used in place of instance variables whenever possible. Although using instance variables is a valid way of doing things, by agreeing to prefer properties our code will be more consistent. 
 
