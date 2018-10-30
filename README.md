@@ -105,6 +105,41 @@ Use `#pragma mark -` to categorize methods in functional groupings and protocol/
 - (NSString *)description {}
 ```
 
+## Header Imports
+
+#import statements should be kept to a minimum, especially in header files. Within header files use @class and @protocol where possible to avoid importing those dependencies.
+
+Headers should at least, directly or indirectly, import <Foundation/Foundation.h> (any common SDK framework header will import foundation indirectly).
+
+Framework imports should always import the framework umbrella header, not any of it individual header files.
+
+#import statements should be organized as follows, in sections separated by a white line:
+* System imports in alphabetical order (low level UNIX headers, if any).
+* System framework imports in alphabetical order (i.e. <Cocoa/Cocoa.h>)
+* Project framework imports in alphabetical order
+* Local imports in alphabetical order
+* On .m files, the corresponding .h import.
+
+**Preferred:**
+
+```objc
+#import <Cocoa/Cocoa.h>
+#import <Quartz/Quartz.h>
+
+#import "AFTextFieldUtilities.h"
+
+#import "AFMyViewController.h"
+```
+
+**Not Preferred:**
+
+```objc
+#import "AFMyViewController.h"
+#import <Cocoa/Cocoa.h>
+#import "AFTextFieldUtilities.h"
+#import <Quartz/Quartz.h>
+```
+
 ## Spacing
 
 * Indent using 4 spaces. Never indent with tabs. Be sure to set this preference in Xcode.
@@ -171,7 +206,7 @@ UIButton *settingsButton;
 UIButton *setBut;
 ```
 
-A two letter prefix should always be used for class names and constants, however may be omitted for Core Data entity names. For common AnchorFree entities prefix 'AF' should be used. Each project should use own prefix for custom entities (BN, HT etc.)
+A common, per project prefix should always be used for class names and constants. It may however be omitted for Core Data entity names. For common AnchorFree entities prefix 'AF' should be used. Each project should use its own prefix for custom entities (BN, HT etc.). New projects should use three letter prefixes as Apple reserves two letter ones for present and future APIs.
 
 Constants should be camel-case with all words capitalized and prefixed by the related class name for clarity.
 
@@ -205,7 +240,10 @@ id varnm;
 
 When using properties, instance variables should always be accessed and mutated using `self.`. This means that all properties will be visually distinct, as they will all be prefaced with `self.`. 
 
-An exception to this: inside initializers, the backing instance variable (i.e. _variableName) should be used directly to avoid any potential side effects of the getters/setters.
+Exceptions to this will be made in those places where we want to avoid any potential side effects of the getters/setters and thus the backing instance variable should be used directly. Namely:
+1) Initializers
+2) dealloc method implementations
+3) Other cases where the internal implementation warrants it. Those should always be documented as such, should only happen within a class' main implementation and should generally be avoided.
 
 Local variables should not contain underscores.
 
@@ -239,6 +277,8 @@ Variables should be named as descriptively as possible. Single letter variable n
 
 Asterisks indicating pointers belong with the variable, e.g., `NSString *text` not `NSString* text` or `NSString * text`, except in the case of constants.
 
+Collection variables should be templatized when possible to make explicit the types of the contents of the collection, i.e. use `NSArray<NSNumber *> *` rather than vanilla `NSArray *`.
+
 [Private properties](#private-properties) should be used in place of instance variables whenever possible. Although using instance variables is a valid way of doing things, by agreeing to prefer properties our code will be more consistent. 
 
 Direct access to instance variables that 'back' properties should be avoided except in initializer methods (`init`, `initWithCoder:`, etc…), `dealloc` methods and within custom setters and getters. For more information on using Accessor Methods in Initializer Methods and dealloc, see [here](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW6).
@@ -248,7 +288,8 @@ Direct access to instance variables that 'back' properties should be avoided exc
 ```objc
 @interface AFTutorial : NSObject
 
-@property (strong, nonatomic) NSString *tutorialName;
+@property (nonatomic) NSString *tutorialName;
+@property (nonatomic) NSDictionary<NSString *, id> *userInfo;
 
 @end
 ```
@@ -259,25 +300,29 @@ Direct access to instance variables that 'back' properties should be avoided exc
 @interface AFTutorial : NSObject {
     NSString *tutorialName;
 }
+
+@property (nonatomic) NSDictionary *userInfo;
+
+@end
 ```
 
 
 ## Property Attributes
 
-Property attributes should be explicitly listed, and will help new programmers when reading the code.  The order of properties should be storage then atomicity, which is consistent with automatically generated code when connecting UI elements from Interface Builder.
+The order of property attributes should be storage then atomicity, which is consistent with automatically generated code when connecting UI elements from Interface Builder. Only list those attributes that deviate from their default values, it avoids unnecessary noise when parsing the attribute behavior.
 
 **Preferred:**
 
 ```objc
 @property (weak, nonatomic) IBOutlet UIView *containerView;
-@property (strong, nonatomic) NSString *tutorialName;
+@property (nonatomic) NSString *tutorialName;
 ```
 
 **Not Preferred:**
 
 ```objc
 @property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic) NSString *tutorialName;
+@property (nonatomic, strong) NSString *tutorialName;
 ```
 
 Properties with mutable counterparts (e.g. NSString) should prefer `copy` instead of `strong`. 
@@ -294,6 +339,14 @@ Why? Even if you declared a property as `NSString` somebody might pass in an ins
 ```objc
 @property (strong, nonatomic) NSString *tutorialName;
 ```
+
+## Nullability
+
+New headers should be wrapped in NS_ASSUME_NONNULL_BEGIN and NS_ASSUME_NONNULL_END, and its properties and methods properly annotated for nullability.
+
+Existing headers should be migrated whenever heavily modified. Unfortunately piecemeal adoption of nullability qualifiers in a header is not possible at this time.
+
+Methods and properties whose nullability attributes deviate from the standard should be documented as to why.
 
 ## Dot-Notation Syntax
 
@@ -357,6 +410,34 @@ static CGFloat const AFImageThumbnailHeight = 50.0;
 #define thumbnailHeight 2
 ```
 
+## String Enumerations
+
+For APIs that take a limited set of string values, use NS_STRING_ENUM, or NS_EXTENSIBLE_STRING_ENUM if more values may be declared elsewhere.
+
+**Preferred:**
+
+```objc
+typedef NSString *AFAnalyticsIdentifier NS_EXTENSIBLE_STRING_ENUM;
+
+extern const AFAnalyticsIdentifier AFAboutViewIdentifier;
+
+...
+
+@property (readonly, copy) AFAnalyticsIdentifier analyticsIdentifier;
+
+...
+```
+
+**Not Preferred:**
+
+```objc
+extern NSString * const AFAboutViewIdentifier;
+
+...
+
+@property (readonly, copy) NSString *analyticsIdentifier;
+```
+
 ## Enumerated Types
 
 When using `enum`s, it is recommended to use the new fixed underlying type specification because it has stronger type checking and code completion. The SDK now includes a macro to facilitate and encourage use of fixed underlying types: `NS_ENUM()`
@@ -392,7 +473,6 @@ enum GlobalConstants {
     kMaxPinCount = 500,
 };
 ```
-
 
 ## Case Statements
 
@@ -472,21 +552,22 @@ Private properties should be declared in class extensions (anonymous categories)
 
 ## Booleans
 
-Objective-C uses `YES` and `NO`.  Therefore `true` and `false` should only be used for CoreFoundation, C or C++ code.  Since `nil` resolves to `NO` it is unnecessary to compare it in conditions. Never compare something directly to `YES`, because `YES` is defined to 1 and a `BOOL` can be up to 8 bits.
+Objective-C uses `YES` and `NO`.  Therefore `true` and `false` should only be used for CoreFoundation, C or C++ code.  Prefer explicit comparison of pointers to nil, especially for basic Foundation types. Never compare something directly to `YES`, because `YES` is defined to 1 and a `BOOL` can be up to 8 bits.
 
 This allows for more consistency across files and greater visual clarity.
 
 **Preferred:**
 
 ```objc
-if (someObject) {}
+if (someObject != nil) {}
 if (![anotherObject boolValue]) {}
+if (isAwesome) {}
 ```
 
 **Not Preferred:**
 
 ```objc
-if (someObject == nil) {}
+if (someObject) {}
 if ([anotherObject boolValue] == NO) {}
 if (isAwesome == YES) {} // Never do this.
 if (isAwesome == true) {} // Never do this.
@@ -532,6 +613,8 @@ The Ternary operator, `?:` , should only be used when it increases clarity or co
 
 Non-boolean variables should be compared against something, and parentheses are added for improved readability.  If the variable being compared is a boolean type, then no parentheses are needed.
 
+You can use the "Elvis" operator `?:` to give default values to object variables unless the logic is complex enough to impede redability.
+
 **Preferred:**
 ```objc
 NSInteger value = 5;
@@ -539,11 +622,18 @@ result = (value != 0) ? x : y;
 
 BOOL isHorizontal = YES;
 result = isHorizontal ? x : y;
+
+NSFont *textFont = attributes[@"font"] ?: [NSFont systemFontOfSize:[NSFont systemFontSize]];
 ```
 
 **Not Preferred:**
 ```objc
 result = a > b ? x = c > d ? c : d : y;
+
+NSFont *textFont = attributes[@"font"];
+if (textFont == nil) {
+    textFont = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+}
 ```
 
 ## Init Methods
@@ -670,21 +760,6 @@ Singleton objects should use a thread-safe pattern for creating their shared ins
 }
 ```
 This will prevent [possible and sometimes prolific crashes](http://cocoasamurai.blogspot.com/2011/04/singletons-your-doing-them-wrong.html).
-
-
-## Line Breaks
-
-Line breaks are an important topic since this style guide is focused for print and online readability.
-
-For example:
-```objc
-self.productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
-```
-A long line of code like this should be carried on to the second line adhering to this style guide's Spacing section.
-```objc
-self.productsRequest = [[SKProductsRequest alloc] 
-    initWithProductIdentifiers:productIdentifiers];
-```
 
 
 ## Xcode project
