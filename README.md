@@ -253,7 +253,7 @@ In method signatures, there should be a space after the method type (-/+ symbol)
 
 The usage of the word "and" is reserved.  It should not be used for multiple parameters as illustrated in the `initWithWidth:height:` example below.
 
-There should be no space after method return type's pair of parenthesis.
+There should be no space between the method's return type and its name.
 
 **Preferred:**
 ```objc
