@@ -253,6 +253,8 @@ In method signatures, there should be a space after the method type (-/+ symbol)
 
 The usage of the word "and" is reserved.  It should not be used for multiple parameters as illustrated in the `initWithWidth:height:` example below.
 
+There should be no space between the method's return type and its name.
+
 **Preferred:**
 ```objc
 - (void)setExampleText:(NSString *)text image:(UIImage *)image;
@@ -269,6 +271,7 @@ The usage of the word "and" is reserved.  It should not be used for multiple par
 - (id)taggedView:(NSInteger)tag;
 - (instancetype)initWithWidth:(CGFloat)width andHeight:(CGFloat)height;
 - (instancetype)initWith:(int)width and:(int)height;  // Never do this.
+- (NSTimeInterval) clearAll;
 ```
 
 ## Variables
