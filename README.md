@@ -206,7 +206,7 @@ UIButton *settingsButton;
 UIButton *setBut;
 ```
 
-A common, per project prefix should always be used for class names and constants. It may however be omitted for Core Data entity names. There is a number of existing classes using two letter prefixes ('AF' for cross client logic, 'BN' for classes inherited from Betternet etc.) but going forward all new classes should be using three letter prefixes to avoid clashes with system components. Prefixes in use as follows:
+A common, per project prefix should always be used for class names and constants. It may however be omitted for Core Data entity names. There are a number of existing classes using two letter prefixes ('AF' for cross client logic, 'BN' for classes inherited from Betternet etc.) but going forward all new classes should be using three letter prefixes to avoid clashes with system components. Prefixes in use as follows:
 
 Cross-client components: ANF
 Hotspot Shield: HSS
